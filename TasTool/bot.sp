@@ -127,12 +127,27 @@ public void BotPrediction(int &buttons, float angles[3])
 	FrameInfo Frame;
 	g_hFrames.GetArray(g_iPredictionTick, Frame, sizeof(FrameInfo));
 
-	buttons = Frame.buttons;
-	angles = Frame.ang;
-
 	// save predicted pos and vel to array
 	GetClientAbsOrigin(g_iBot, Frame.pos);
 	GetEntPropVector(g_iBot, Prop_Data, "m_vecAbsVelocity", Frame.vel);
+
+	if (Frame.autostrafe)
+	{
+		float speed = SquareRoot(Frame.vel[0] * Frame.vel[0] + Frame.vel[1] * Frame.vel[1]);
+		float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
+
+		float speedang[3]; // angles of current velocity vector
+		GetVectorAngles(Frame.vel, speedang);
+
+		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
+		Frame.ang[1] = speedang[1] + epsilon; // left
+		Frame.ang[1] = speedang[1] - epsilon; // right strafe
+	}
+
+	// apply inputs for current frame
+	buttons = Frame.buttons;
+	angles = Frame.ang;
+
 	g_hFrames.SetArray(g_iPredictionTick, Frame, sizeof(FrameInfo));
 
 	g_iPredictionTick++;
