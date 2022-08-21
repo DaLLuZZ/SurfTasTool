@@ -43,7 +43,7 @@ public void ComputeMove(int &buttons, float vel[3])
 //
 public float GetPerfectDelta(float speed)
 {
-	float temp = 30.0 - ((sv_maxspeed * TICK_INTERVAL * sv_airaccelerate) / speed);
+	float temp = (30.0 - (sv_maxspeed * TICK_INTERVAL * sv_airaccelerate)) / speed;
 	if (temp > -1.0 && temp < 1.0)
 		return RadToDeg(ArcCosine(temp));
 
