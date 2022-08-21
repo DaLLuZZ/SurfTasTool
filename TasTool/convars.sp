@@ -25,16 +25,31 @@ public void CheckConVars()
 	TICKRATE = 1.0 / TICK_INTERVAL;
 
 	hforwardspeed = FindConVar("cl_forwardspeed");
-	cl_forwardspeed = GetConVarFloat(hforwardspeed);
-	HookConVarChange(hforwardspeed, OnConVarChanged);
+	if (hforwardspeed)
+	{
+		cl_forwardspeed = GetConVarFloat(hforwardspeed);
+		HookConVarChange(hforwardspeed, OnConVarChanged);
+	}
+	else
+		cl_forwardspeed = MAX_LINEAR_SPEED;
 
 	hbackspeed = FindConVar("cl_backspeed");
-	cl_backspeed = GetConVarFloat(hbackspeed);
-	HookConVarChange(hbackspeed, OnConVarChanged);
+	if (hbackspeed)
+	{
+		cl_backspeed = GetConVarFloat(hbackspeed);
+		HookConVarChange(hbackspeed, OnConVarChanged);
+	}
+	else
+		cl_backspeed = MAX_LINEAR_SPEED;
 
 	hsidespeed = FindConVar("cl_sidespeed");
-	cl_sidespeed = GetConVarFloat(hsidespeed);
-	HookConVarChange(hsidespeed, OnConVarChanged);
+	if (hsidespeed)
+	{
+		cl_sidespeed = GetConVarFloat(hsidespeed);
+		HookConVarChange(hsidespeed, OnConVarChanged);
+	}
+	else
+		cl_sidespeed = NAX_LINEAR_SPEED;
 
 	hairaccelerate = FindConVar("sv_airaccelerate");
 	sv_airaccelerate = GetConVarFloat(hairaccelerate);
