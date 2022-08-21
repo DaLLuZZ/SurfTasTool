@@ -211,10 +211,27 @@ public void AddFrames(int toadd, bool turncopy)
 	{
 		FrameInfo Frame;
 		g_hFrames.GetArray(g_hFrames.Length - 1, Frame, sizeof(FrameInfo));
+
 		if (turncopy)
 			AddVectors(Frame.ang, Frame.angRel, Frame.ang);
 		else
 			Frame.angRel = {0.0, 0.0, 0.0};
+
+		if (Frame.autostrafe)
+		{
+			// TODO: make it customizable (N left turns/M right turns...)
+			if (Frame.buttons & IN_MOVELEFT)
+			{
+				Frame.buttons &= ~IN_MOVELEFT;
+				Frame.buttons |= IN_MOVERIGHT;
+			}
+			else if (Frame.buttons & IN_MOVERIGHT)
+			{
+				Frame.buttons &= ~IN_MOVERIGHT;
+				Frame.buttons |= IN_MOVELEFT;
+			}
+		}
+
 		float velS[3];
 		velS = Frame.vel;
 		ScaleVector(velS, TICK_INTERVAL);
