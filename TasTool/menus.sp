@@ -80,7 +80,7 @@ public int TasHelpersMenuHandler(Menu menu, MenuAction action, int param1, int p
 		case MenuAction_Cancel:
 		{
 			if (param2 == MenuCancel_Exit)
-				OpenTasMenu(param1);
+				OpenEditFrameMenu(param1, g_iSelectedTick);
 		}
 		case MenuAction_End:
 			delete menu;
@@ -94,15 +94,20 @@ public void OpenStrafeControlMenu(int client)
 {
 	Menu menu = new Menu(StrafeControlMenuHandler);
 
+	FrameInfo Frame;
+	g_hFrames.GetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
+
 	menu.SetTitle("Strafe Control");
-	menu.AddItem("0", "Algorithm");
+	menu.AddItem("0", Frame.autostrafe ? "[x] AutoStrafer" : "[ ] AutoStrafer");
+
+	menu.AddItem("1", "Options");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
 
 /**
  * Strafe Control
- * 1. Algorithm
+ * 1. [ ] AutoStrafer
  */
 public int StrafeControlMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -112,7 +117,14 @@ public int StrafeControlMenuHandler(Menu menu, MenuAction action, int param1, in
 		{
 			switch (param2)
 			{
-				//case 0: algorithm selector menu...
+				case 0:
+				{
+					FrameInfo Frame;
+					g_hFrames.GetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
+					Frame.autostrafe = !Frame.autostrafe;
+					g_hFrames.SetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
+					OpenStrafeControlMenu(param1);
+				}
 			}
 		}
 		case MenuAction_Cancel:
@@ -199,10 +211,27 @@ public void AddFrames(int toadd, bool turncopy)
 	{
 		FrameInfo Frame;
 		g_hFrames.GetArray(g_hFrames.Length - 1, Frame, sizeof(FrameInfo));
+
 		if (turncopy)
 			AddVectors(Frame.ang, Frame.angRel, Frame.ang);
 		else
 			Frame.angRel = {0.0, 0.0, 0.0};
+
+		if (Frame.autostrafe)
+		{
+			// TODO: make it customizable (N left turns/M right turns...)
+			if (Frame.buttons & IN_MOVELEFT)
+			{
+				Frame.buttons &= ~IN_MOVELEFT;
+				Frame.buttons |= IN_MOVERIGHT;
+			}
+			else if (Frame.buttons & IN_MOVERIGHT)
+			{
+				Frame.buttons &= ~IN_MOVERIGHT;
+				Frame.buttons |= IN_MOVELEFT;
+			}
+		}
+
 		float velS[3];
 		velS = Frame.vel;
 		ScaleVector(velS, TICK_INTERVAL);
@@ -241,6 +270,7 @@ public void OpenEditFrameMenu(int client, int frame)
 	menu.AddItem("0", "Buttons");
 	menu.AddItem("1", "RelYaw");
 	menu.AddItem("2", "RelPitch");
+	menu.AddItem("3", "Helpers");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -250,6 +280,7 @@ public void OpenEditFrameMenu(int client, int frame)
  * 1. Buttons
  * 2. RelYaw
  * 3. RelPitch
+ * 4. Helpers
  */
 public int EditFrameMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -262,6 +293,7 @@ public int EditFrameMenuHandler(Menu menu, MenuAction action, int param1, int pa
 				case 0: OpenEditFrameButtonsMenu(param1);
 				case 1: OpenEditFrameRelYawMenu(param1);
 //				case 2: OpenEditFrameRelPitchMenu(param1);
+				case 3: OpenTasHelpersMenu(param1);
 			}
 		}
 		case MenuAction_Cancel:

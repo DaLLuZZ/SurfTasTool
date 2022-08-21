@@ -23,6 +23,7 @@ enum struct FrameInfo
 	float ang[3]; // absolute angles = oldang + angRel
 	float pos[3]; // absolute position of the player before any movement calculations 
 	float vel[3]; // absolute velocity of the player before any movement calculations
+	bool autostrafe; // is autostrafe used for this frame?
 }
 
 enum struct FileHeader
