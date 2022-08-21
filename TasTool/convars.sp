@@ -10,6 +10,9 @@ float cl_backspeed;
 ConVar hsidespeed;
 float cl_sidespeed;
 
+ConVar hairaccelerate;
+float sv_airaccelerate;
+
 public void CheckConVars()
 {
 	TICK_INTERVAL = GetTickInterval();
@@ -26,6 +29,10 @@ public void CheckConVars()
 	hsidespeed = FindConVar("cl_sidespeed");
 	cl_sidespeed = GetConVarFloat(hsidespeed);
 	HookConVarChange(hsidespeed, OnConVarChanged);
+
+	hairaccelerate = FindConVar("sv_airaccelerate");
+	sv_airaccelerate = GetConVarFloat(hairaccelerate);
+	HookConVarChange(hairaccelerate, OnConVarChanged);
 }
 
 public void OnConVarChanged(Handle hConVar, const char[] oldValue, const char[] newValue)
@@ -36,4 +43,6 @@ public void OnConVarChanged(Handle hConVar, const char[] oldValue, const char[] 
 		cl_backspeed = GetConVarFloat(hbackspeed);
 	else if (hConVar == hsidespeed)
 		cl_sidespeed = GetConVarFloat(hsidespeed);
+	else if (hConVar == hairaccelerate)
+		sv_airaccelerate = GetConVarFloat(hairaccelerate);
 }
