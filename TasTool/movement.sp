@@ -39,15 +39,14 @@ public void ComputeMove(int &buttons, float vel[3])
 }
 
 //
-// Calculates perfect delta angle for autostrafing
+// Calculates perfect delta angle (deg) for autostrafing
 //
 public float GetPerfectDelta(float speed)
 {
 	float accelspeed = sv_airaccelerate * sv_maxspeed * TICK_INTERVAL;
 
-	if (accelspeed > sv_air_max_wishspeed)
-		accelspeed = sv_air_max_wishspeed;
+	if (accelspeed >= sv_air_max_wishspeed) // should clamp it to sv_air_max_wishspeed
+		return 90.0; // return 90.0 because ArcCosine(0) is 90 degrees
 
-	float temp = (sv_air_max_wishspeed - accelspeed) / speed;
-	return RadToDeg(ArcCosine(temp));
+	return RadToDeg(ArcCosine((sv_air_max_wishspeed - accelspeed) / speed));
 }
