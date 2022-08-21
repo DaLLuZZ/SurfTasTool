@@ -1,3 +1,5 @@
+#define MAX_LINEAR_SPEED 450.0
+
 float TICKRATE;
 float TICK_INTERVAL;
 
