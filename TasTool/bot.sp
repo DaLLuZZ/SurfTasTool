@@ -140,8 +140,9 @@ public void BotPrediction(int &buttons, float angles[3])
 		GetVectorAngles(Frame.vel, speedang);
 
 		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
+
+		// TODO: Test on low sv_airaccelerate (left/right (+/-)) and make it depend on buttons (+A/+W)
 		Frame.ang[1] = speedang[1] + epsilon; // left
-		Frame.ang[1] = speedang[1] - epsilon; // right strafe
 	}
 
 	// apply inputs for current frame
