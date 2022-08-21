@@ -2,8 +2,6 @@
 #define YAW 1
 #define ROLL 2
 
-#define MAX_LINEAR_SPEED 450.0
-
 // player
 float VEC_VIEW[] = { 0.0, 0.0, 64.0 };
 float VEC_HULL_MIN[] = { -16.0, -16.0, 0.0 };
