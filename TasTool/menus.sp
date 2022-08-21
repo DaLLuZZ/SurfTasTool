@@ -119,6 +119,7 @@ public int StrafeControlMenuHandler(Menu menu, MenuAction action, int param1, in
 			{
 				case 0:
 				{
+					FrameInfo Frame;
 					g_hFrames.GetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
 					Frame.autostrafe = !Frame.autostrafe;
 					g_hFrames.SetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
