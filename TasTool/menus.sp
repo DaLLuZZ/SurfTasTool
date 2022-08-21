@@ -94,10 +94,11 @@ public void OpenStrafeControlMenu(int client)
 {
 	Menu menu = new Menu(StrafeControlMenuHandler);
 
+	FrameInfo Frame;
+	g_hFrames.GetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
+
 	menu.SetTitle("Strafe Control");
-	char szAutoStrafer[16];
-	FormatEx(szAutoStrafer, sizeof(szAutoStrafer), "%s AutoStrafer", g_bAutoStrafer ? "[x]" : "[ ]");
-	menu.AddItem("0", szAutoStrafer);
+	menu.AddItem("0", Frame.autostrafe ? "[x] AutoStrafer" : "[ ] AutoStrafer");
 
 	menu.AddItem("1", "Options");
 
@@ -118,7 +119,9 @@ public int StrafeControlMenuHandler(Menu menu, MenuAction action, int param1, in
 			{
 				case 0:
 				{
-					g_bAutoStrafer = !g_bAutoStrafer;
+					g_hFrames.GetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
+					Frame.autostrafe = !Frame.autostrafe;
+					g_hFrames.SetArray(g_iSelectedTick, Frame, sizeof(FrameInfo));
 					OpenStrafeControlMenu(param1);
 				}
 			}
