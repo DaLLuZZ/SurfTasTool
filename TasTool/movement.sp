@@ -2,6 +2,8 @@
 #define YAW 1
 #define ROLL 2
 
+#define MAX_LINEAR_SPEED 450.0
+
 // player
 float VEC_VIEW[] = { 0.0, 0.0, 64.0 };
 float VEC_HULL_MIN[] = { -16.0, -16.0, 0.0 };
@@ -9,15 +11,6 @@ float VEC_HULL_MAX[] = { 16.0, 16.0, 72.0 };
 float VEC_DUCK_HULL_MIN[] = {-16.0, -16.0, 0.0 };
 float VEC_DUCK_HULL_MAX[] = { 16.0, 16.0, 54.0 };
 float VEC_DUCK_VIEW[] = { 0.0, 0.0, 46.0 };
-
-enum
-{
-	STRAFE_TURN = 0,
-	STRAFE_AIRMAXVELGAIN,
-	STRAFE_PRESPEED
-}
-
-int g_iStrafeAlgorithm;
 
 //
 // Calculate forward & side components to make fakeclient react on forced movement (walk) buttons
