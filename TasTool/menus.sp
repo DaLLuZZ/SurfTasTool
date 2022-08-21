@@ -80,7 +80,7 @@ public int TasHelpersMenuHandler(Menu menu, MenuAction action, int param1, int p
 		case MenuAction_Cancel:
 		{
 			if (param2 == MenuCancel_Exit)
-				OpenTasMenu(param1);
+				OpenEditFrameMenu(param1, g_iSelectedTick);
 		}
 		case MenuAction_End:
 			delete menu;
@@ -95,14 +95,18 @@ public void OpenStrafeControlMenu(int client)
 	Menu menu = new Menu(StrafeControlMenuHandler);
 
 	menu.SetTitle("Strafe Control");
-	menu.AddItem("0", "Algorithm");
+	char szAutoStrafer[16];
+	FormatEx(szAutoStrafer, sizeof(szAutoStrafer), "%s AutoStrafer", g_bAutoStrafer ? "[x]" : "[ ]");
+	menu.AddItem("0", szAutoStrafer);
+
+	menu.AddItem("1", "Options");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
 
 /**
  * Strafe Control
- * 1. Algorithm
+ * 1. [ ] AutoStrafer
  */
 public int StrafeControlMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -112,7 +116,11 @@ public int StrafeControlMenuHandler(Menu menu, MenuAction action, int param1, in
 		{
 			switch (param2)
 			{
-				//case 0: algorithm selector menu...
+				case 0:
+				{
+					g_bAutoStrafer = !g_bAutoStrafer;
+					OpenStrafeControlMenu(param1);
+				}
 			}
 		}
 		case MenuAction_Cancel:
@@ -241,6 +249,7 @@ public void OpenEditFrameMenu(int client, int frame)
 	menu.AddItem("0", "Buttons");
 	menu.AddItem("1", "RelYaw");
 	menu.AddItem("2", "RelPitch");
+	menu.AddItem("3", "Helpers");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -250,6 +259,7 @@ public void OpenEditFrameMenu(int client, int frame)
  * 1. Buttons
  * 2. RelYaw
  * 3. RelPitch
+ * 4. Helpers
  */
 public int EditFrameMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -262,6 +272,7 @@ public int EditFrameMenuHandler(Menu menu, MenuAction action, int param1, int pa
 				case 0: OpenEditFrameButtonsMenu(param1);
 				case 1: OpenEditFrameRelYawMenu(param1);
 //				case 2: OpenEditFrameRelPitchMenu(param1);
+				case 3: OpenTasHelpersMenu(param1);
 			}
 		}
 		case MenuAction_Cancel:
