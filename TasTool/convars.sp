@@ -51,7 +51,7 @@ public void CheckConVars()
 		HookConVarChange(hsidespeed, OnConVarChanged);
 	}
 	else
-		cl_sidespeed = NAX_LINEAR_SPEED;
+		cl_sidespeed = MAX_LINEAR_SPEED;
 
 	hairaccelerate = FindConVar("sv_airaccelerate");
 	sv_airaccelerate = GetConVarFloat(hairaccelerate);
