@@ -131,14 +131,16 @@ public void BotPrediction(int &buttons, float angles[3])
 	GetClientAbsOrigin(g_iBot, Frame.pos);
 	GetEntPropVector(g_iBot, Prop_Data, "m_vecAbsVelocity", Frame.vel);
 
+	float speed = SquareRoot(Frame.vel[0] * Frame.vel[0] + Frame.vel[1] * Frame.vel[1]);
+
+	float speedang[3]; // angles of current velocity vector
+	GetVectorAngles(Frame.vel, speedang);
+
+	Frame.ang[0] = speedang[0]; // apply view pitch (let's look in the direction of the velocity vector)
+
 	if (Frame.autostrafe)
 	{
-		float speed = SquareRoot(Frame.vel[0] * Frame.vel[0] + Frame.vel[1] * Frame.vel[1]);
 		float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
-
-		float speedang[3]; // angles of current velocity vector
-		GetVectorAngles(Frame.vel, speedang);
-
 		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
 
 		// TODO: Test on low sv_airaccelerate (left/right (+/-)) and make it depend on buttons (+A/+W)
