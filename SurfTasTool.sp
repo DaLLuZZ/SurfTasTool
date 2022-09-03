@@ -89,11 +89,9 @@ public void OnClientPutInServer(int client)
 		CreateTimer(0.1, HudTextTimer, GetClientUserId(client), TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 }
 
-public bool IsValidClient(int &client)
+public bool IsValidClient(int client)
 {
-	client = 1;
-	if (client >= 0 && client <= MaxClients && IsClientInGame(client))
-		if (IsPlayerAlive(client))
+	if (client > 0 && client <= MaxClients && IsClientInGame(client))
 			return true;
 	return false;
 }
