@@ -30,13 +30,16 @@ public void ShowTrajectory(int client)
     {
         // Should it be optimized?
         g_hFrames.GetArray(i, Frame, sizeof(FrameInfo));
-        float framepos[] = { Frame.pos[0], Frame.pos[1], Frame.pos[2] };
 
-        for (int i = 0; i < 3; i++)
+        float framepos[3];
+        for (int j = 0; j < 3; j++)
+            framepos[j] = Frame.pos[j];
+
+        for (int j = 0; j < 3; j++)
             switch g_iTrajectoryMode
             {
-                case TRAJECTORYMODE_MAX: framepos[i] += VEC_HULL_MAX;
-                case TRAJECTORYMODE_MIN: framepos[i] += VEC_HULL_MIN;
+                case TRAJECTORYMODE_MAX: framepos[j] += VEC_HULL_MAX;
+                case TRAJECTORYMODE_MIN: framepos[j] += VEC_HULL_MIN;
             }
 
         if (i == g_iSelectedTick)
@@ -44,7 +47,8 @@ public void ShowTrajectory(int client)
         else
             TE_SetupBeamPoints(pos, framepos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 255, 0, 255}), 0);
         TE_SendToClient(client);
-        for (int i = 0; i < 3; i++)
-            pos[i] = framepos[i];
+
+        for (int j = 0; i < 3; j++)
+            pos[j] = framepos[j];
     }
 }
