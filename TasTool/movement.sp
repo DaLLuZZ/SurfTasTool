@@ -45,7 +45,7 @@ public float GetPerfectDelta(float speed)
 //
 // Reimplementation of CGameMovement::Friction
 //
-public void Friction(float vecVelocity[3])
+public float Friction(float vecVelocity[3])
 {
 	float speed = SquareRoot(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1]);
 
