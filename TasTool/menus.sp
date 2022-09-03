@@ -232,6 +232,8 @@ public void AddFrames(int toadd, bool turncopy)
 				Frame.buttons &= ~IN_MOVERIGHT;
 				Frame.buttons |= IN_MOVELEFT;
 			}
+			else
+				Frame.buttons |= IN_MOVELEFT;
 		}
 
 		float velS[3];
