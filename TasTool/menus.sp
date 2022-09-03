@@ -485,7 +485,7 @@ public void OpenChangeTrajectoryModeMenu(int client)
  * 2. [ ] MAX
  * 3. [ ] MIN
  */
-public int TrajectoryControlMenuHandler(Menu menu, MenuAction action, int param1, int param2)
+public int ChangeTrajectoryModeMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
 	switch (action)
 	{
