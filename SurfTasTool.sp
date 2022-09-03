@@ -54,8 +54,8 @@ int g_iIntValue;
 #include "TasTool/bot.sp"
 #include "TasTool/recording.sp"
 #include "TasTool/commands.sp"
-#include "TasTool/menus.sp"
 #include "TasTool/trajectory.sp"
+#include "TasTool/menus.sp"
 #include "TasTool/hud.sp"
 
 public void OnPluginStart()
