@@ -2,7 +2,7 @@ public Action HudTextTimer(Handle timer, any userid)
 {
 	int client = GetClientOfUserId(userid);
 
-	if (IsValidClient(client) && IsClientInGame(client))
+	if (IsValidClient(client))
 	{
 		char szHudText[128];
 
