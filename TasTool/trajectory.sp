@@ -2,6 +2,12 @@
 int g_iBeamSprite;
 int g_iHaloSprite;
 
+int g_iTrajectoryMode;
+
+#define TRAJECTORYMODE_DEFAULT 0
+#define TRAJECTORYMODE_MAX 1
+#define TRAJECTORYMODE_MIN 2
+
 // Todo: draw not in one frame but separate to several
 // https://developer.valvesoftware.com/wiki/Temporary_Entity
 // https://forums.alliedmods.net/showthread.php?t=298051
@@ -24,11 +30,21 @@ public void ShowTrajectory(int client)
     {
         // Should it be optimized?
         g_hFrames.GetArray(i, Frame, sizeof(FrameInfo));
+        float framepos[] = { Frame.pos[0], Frame.pos[1], Frame.pos[2] };
+
+        for (int i = 0; i < 3; i++)
+            switch g_iTrajectoryMode
+            {
+                case TRAJECTORYMODE_MAX: framepos[i] += VEC_HULL_MAX;
+                case TRAJECTORYMODE_MIN: framepos[i] += VEC_HULL_MIN;
+            }
+
         if (i == g_iSelectedTick)
-            TE_SetupBeamPoints(pos, Frame.pos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 0, 0, 255}), 0);
+            TE_SetupBeamPoints(pos, framepos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 0, 0, 255}), 0);
         else
-            TE_SetupBeamPoints(pos, Frame.pos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 255, 0, 255}), 0);
+            TE_SetupBeamPoints(pos, framepos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 255, 0, 255}), 0);
         TE_SendToClient(client);
-        pos = Frame.pos;
+        for (int i = 0; i < 3; i++)
+            pos[i] = framepos[i];
     }
 }
