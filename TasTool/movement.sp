@@ -47,21 +47,25 @@ public float GetPerfectDelta(float speed)
 //
 public void Friction(float vecVelocity[3])
 {
-	float speed = sqrt(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1] + vecVelocity[2] * vecVelocity[2]);
+	float speed = SquareRoot(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1] + vecVelocity[2] * vecVelocity[2]);
 
 	if (speed < 0.1)
-		return;
+		return 0.0;
 
 	float newspeed = speed - ((speed < sv_stopspeed) ? sv_stopspeed : speed) * sv_friction * TICK_INTERVAL;
 
 	if (newspeed < 0.0)
 		newspeed = 0.0;
 
+	float fret = newspeed;
+
 	if (newspeed != speed)
 	{
 		newspeed /= speed;
 		ScaleVector(vecVelocity, newspeed);
 	}
+
+	return fret;
 }
 
 //
