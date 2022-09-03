@@ -48,7 +48,7 @@ public void ShowTrajectory(int client)
             TE_SetupBeamPoints(pos, framepos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 255, 0, 255}), 0);
         TE_SendToClient(client);
 
-        for (int j = 0; i < 3; j++)
+        for (int j = 0; j < 3; j++)
             pos[j] = framepos[j];
     }
 }
