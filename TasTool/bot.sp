@@ -136,15 +136,30 @@ public void BotPrediction(int &buttons, float angles[3])
 	float speedang[3]; // angles of current velocity vector
 	GetVectorAngles(Frame.vel, speedang);
 
-	Frame.ang[0] = speedang[0]; // apply view pitch (let's look in the direction of the velocity vector)
+	Frame.ang[0] = speedang[0]; // apply view pitch (let's look in the direction of the current velocity vector)
 
 	if (Frame.autostrafe)
 	{
-		float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
+		float delta;
+
+		if (GetEntityFlags(g_iBot) & FL_ONGROUND)
+		{
+			// if we are on ground, we are trying to get a maximal prespeed
+			float velTemp[3];
+			for (int i = 0; i < 3; i++)
+				velTemp[i] = Frame.vel[i];
+			float newspeed = Friction(velTemp); // Friction should be applied before getting perfect gamma
+			delta = GetPerfectGamma(newspeed); // delta (equals to gamma) is an optimal angle (deg) between wishdir and current velocity vectors
+		}
+		else
+			delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
+
 		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
 
-		// TODO: Test on low sv_airaccelerate (left/right (+/-)) and make it depend on buttons (+A/+W)
-		Frame.ang[1] = speedang[1] + epsilon; // left
+		if (Frame.buttons & IN_LEFT)
+			Frame.ang[1] = speedang[1] + epsilon;
+		else if (Frame.buttons & IN_RIGHT)
+			Frame.ang[1] = speedang[1] - epsilon;
 	}
 
 	// apply inputs for current frame
