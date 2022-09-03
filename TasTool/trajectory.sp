@@ -36,7 +36,7 @@ public void ShowTrajectory(int client)
             framepos[j] = Frame.pos[j];
 
         for (int j = 0; j < 3; j++)
-            switch g_iTrajectoryMode
+            switch (g_iTrajectoryMode)
             {
                 case TRAJECTORYMODE_MAX: framepos[j] += VEC_HULL_MAX;
                 case TRAJECTORYMODE_MIN: framepos[j] += VEC_HULL_MIN;
