@@ -63,3 +63,17 @@ public void Friction(float vecVelocity[3])
 		ScaleVector(vecVelocity, newspeed);
 	}
 }
+
+//
+// Calculates perfect gamma angle (deg) for prespeed
+// Friction should be applied on speed before calling GetPerfectGamma
+//
+public float GetPerfectGamma(float speed)
+{
+	float accelspeed = sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed);
+
+	if (sv_maxspeed - accelspeed >= speed)
+		return 90.0;
+
+	return RadToDeg(ArcCosine((sv_maxspeed - accelspeed) / speed));
+}
