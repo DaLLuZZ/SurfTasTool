@@ -8,6 +8,8 @@
  * * * Edit single selected frame menu (OpenEditFrameMenu)
  * * * * Edit single selected frame buttons menu (OpenEditFrameButtonsMenu)
  * * * * Edit single selected frame Relative Yaw menu (OpenEditFrameRelYawMenu)
+ * * Trajectory Control Menu (OpenTrajectoryControlMenu)
+ * * * Trajectory Mode Menu (OpenChangeTrajectoryModeMenu)
  */
 
 /**
@@ -414,6 +416,104 @@ public int EditFrameRelYawMenuHandler(Menu menu, MenuAction action, int param1, 
 		{
 			if (param2 == MenuCancel_Exit)
 				OpenEditFrameMenu(param1, g_iSelectedTick);
+		}
+		case MenuAction_End:
+			delete menu;
+	}
+}
+
+/**
+ * Opens Trajectory Options Menu
+ */
+public void OpenTrajectoryControlMenu(int client)
+{
+	Menu menu = new Menu(TrajectoryControlMenuHandler);
+	menu.SetTitle("Trajectory Options");
+
+	menu.AddItem("0", "Mode");
+	menu.AddItem("1", "Color");
+
+	menu.Display(client, MENU_TIME_FOREVER);
+}
+
+/**
+ * Trajectory Options
+ * Left is Positive
+ * 1. Mode
+ * 2. Color
+ */
+public int TrajectoryControlMenuHandler(Menu menu, MenuAction action, int param1, int param2)
+{
+	switch (action)
+	{
+		case MenuAction_Select:
+		{
+			switch (param2)
+			{
+				case 0: OpenChangeTrajectoryModeMenu(param1);
+			}
+		}
+		case MenuAction_Cancel:
+		{
+			if (param2 == MenuCancel_Exit)
+				OpenTasMenu(param1);
+		}
+		case MenuAction_End:
+			delete menu;
+	}
+}
+
+/**
+ * Opens Trajectory Mode Menu
+ */
+public void OpenChangeTrajectoryModeMenu(int client)
+{
+	Menu menu = new Menu(ChangeTrajectoryModeMenuHandler);
+	menu.SetTitle("Select Trajectory Mode");
+
+	menu.AddItem("0", g_iTrajectoryMode == TRAJECTORYMODE_DEFAULT ? "[x] DEFAULT" : "[ ] DEFAULT");
+	menu.AddItem("1", g_iTrajectoryMode == TRAJECTORYMODE_MAX ? "[x] MAX" : "[ ] MAX");
+	menu.AddItem("2", g_iTrajectoryMode == TRAJECTORYMODE_MIN ? "[x] MIN" : "[ ] MIN");
+
+	menu.Display(client, MENU_TIME_FOREVER);
+}
+
+/**
+ * Select Trajectory Mode
+ * Left is Positive
+ * 1. [ ] DEFAULT
+ * 2. [ ] MAX
+ * 3. [ ] MIN
+ */
+public int TrajectoryControlMenuHandler(Menu menu, MenuAction action, int param1, int param2)
+{
+	switch (action)
+	{
+		case MenuAction_Select:
+		{
+			switch (param2)
+			{
+				case 0:
+				{
+					g_iTrajectoryMode = TRAJECTORYMODE_DEFAULT;
+					OpenChangeTrajectoryModeMenu(param1);
+				}
+				case 1:
+				{
+					g_iTrajectoryMode = TRAJECTORYMODE_MAX;
+					OpenChangeTrajectoryModeMenu(param1);
+				}
+				case 2:
+				{
+					g_iTrajectoryMode = TRAJECTORYMODE_MIN;
+					OpenChangeTrajectoryModeMenu(param1);
+				}
+			}
+		}
+		case MenuAction_Cancel:
+		{
+			if (param2 == MenuCancel_Exit)
+				OpenTrajectoryControlMenu(param1);
 		}
 		case MenuAction_End:
 			delete menu;
