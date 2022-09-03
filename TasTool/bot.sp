@@ -140,7 +140,7 @@ public void BotPrediction(int &buttons, float angles[3])
 
 	if (Frame.autostrafe)
 	{
-		float delta;
+		float delta, epsilon;
 
 		if (GetEntityFlags(g_iBot) & FL_ONGROUND)
 		{
@@ -154,7 +154,7 @@ public void BotPrediction(int &buttons, float angles[3])
 		else
 			delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
 
-		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
+		epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
 
 		if (Frame.buttons & IN_LEFT)
 			Frame.ang[1] = speedang[1] - epsilon;
