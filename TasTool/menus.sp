@@ -484,10 +484,15 @@ public void OpenChangeTrajectoryModeMenu(int client)
 
 /**
  * Select Trajectory Mode
- * Left is Positive
  * 1. [ ] DEFAULT
  * 2. [ ] MAX
  * 3. [ ] MIN
+ * 4. [ ] BBox 2
+ * 5. [ ] BBox 3
+ * 6. [ ] BBox 4
+ * 7. [ ] BBox 5
+ * 8. [ ] BBox 6
+ * 9. [ ] BBox 7
  */
 public int ChangeTrajectoryModeMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -497,22 +502,18 @@ public int ChangeTrajectoryModeMenuHandler(Menu menu, MenuAction action, int par
 		{
 			switch (param2)
 			{
-				case 0:
-				{
-					g_iTrajectoryMode = TRAJECTORYMODE_DEFAULT;
-					OpenChangeTrajectoryModeMenu(param1);
-				}
-				case 1:
-				{
-					g_iTrajectoryMode = TRAJECTORYMODE_MAX;
-					OpenChangeTrajectoryModeMenu(param1);
-				}
-				case 2:
-				{
-					g_iTrajectoryMode = TRAJECTORYMODE_MIN;
-					OpenChangeTrajectoryModeMenu(param1);
-				}
+				case 0: g_iTrajectoryMode = TRAJECTORYMODE_DEFAULT;
+				case 1: g_iTrajectoryMode = TRAJECTORYMODE_MAX;
+				case 2: g_iTrajectoryMode = TRAJECTORYMODE_MIN;
+				case 3: g_iTrajectoryMode = TRAJECTORYMODE_2;
+				case 4: g_iTrajectoryMode = TRAJECTORYMODE_3;
+				case 5: g_iTrajectoryMode = TRAJECTORYMODE_4;
+				case 6: g_iTrajectoryMode = TRAJECTORYMODE_5;
+				case 7: g_iTrajectoryMode = TRAJECTORYMODE_6;
+				case 8: g_iTrajectoryMode = TRAJECTORYMODE_7;
+				default: g_iTrajectoryMode = TRAJECTORYMODE_DEFAULT;
 			}
+			OpenChangeTrajectoryModeMenu(param1);
 		}
 		case MenuAction_Cancel:
 		{
