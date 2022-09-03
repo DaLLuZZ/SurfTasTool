@@ -47,7 +47,7 @@ public float GetPerfectDelta(float speed)
 //
 public void Friction(float vecVelocity[3])
 {
-	float speed = SquareRoot(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1] + vecVelocity[2] * vecVelocity[2]);
+	float speed = SquareRoot(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1]);
 
 	if (speed < 0.1)
 		return 0.0;
