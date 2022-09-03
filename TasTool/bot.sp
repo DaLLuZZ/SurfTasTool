@@ -157,9 +157,9 @@ public void BotPrediction(int &buttons, float angles[3])
 		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
 
 		if (Frame.buttons & IN_LEFT)
-			Frame.ang[1] = speedang[1] + epsilon;
-		else if (Frame.buttons & IN_RIGHT)
 			Frame.ang[1] = speedang[1] - epsilon;
+		else if (Frame.buttons & IN_RIGHT)
+			Frame.ang[1] = speedang[1] + epsilon;
 	}
 
 	// apply inputs for current frame
