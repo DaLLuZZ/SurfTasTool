@@ -478,6 +478,12 @@ public void OpenChangeTrajectoryModeMenu(int client)
 	menu.AddItem("0", g_iTrajectoryMode == TRAJECTORYMODE_DEFAULT ? "[x] DEFAULT" : "[ ] DEFAULT");
 	menu.AddItem("1", g_iTrajectoryMode == TRAJECTORYMODE_MAX ? "[x] MAX" : "[ ] MAX");
 	menu.AddItem("2", g_iTrajectoryMode == TRAJECTORYMODE_MIN ? "[x] MIN" : "[ ] MIN");
+	menu.AddItem("3", g_iTrajectoryMode == TRAJECTORYMODE_2 ? "[x] BBox 2" : "[ ] BBox 2");
+	menu.AddItem("4", g_iTrajectoryMode == TRAJECTORYMODE_3 ? "[x] BBox 3" : "[ ] BBox 3");
+	menu.AddItem("5", g_iTrajectoryMode == TRAJECTORYMODE_4 ? "[x] BBox 4" : "[ ] BBox 4");
+	menu.AddItem("6", g_iTrajectoryMode == TRAJECTORYMODE_5 ? "[x] BBox 5" : "[ ] BBox 5");
+	menu.AddItem("7", g_iTrajectoryMode == TRAJECTORYMODE_6 ? "[x] BBox 6" : "[ ] BBox 6");
+	menu.AddItem("8", g_iTrajectoryMode == TRAJECTORYMODE_7 ? "[x] BBox 7" : "[ ] BBox 7");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
