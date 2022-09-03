@@ -41,3 +41,25 @@ public float GetPerfectDelta(float speed)
 
 	return RadToDeg(ArcCosine((sv_air_max_wishspeed - accelspeed) / speed));
 }
+
+//
+// Reimplementation of CGameMovement::Friction
+//
+public void Friction(float vecVelocity[3])
+{
+	float speed = sqrt(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1] + vecVelocity[2] * vecVelocity[2]);
+
+	if (speed < 0.1)
+		return;
+
+	float newspeed = speed - ((speed < sv_stopspeed) ? sv_stopspeed : speed) * sv_friction * TICK_INTERVAL;
+
+	if (newspeed < 0.0)
+		newspeed = 0.0;
+
+	if (newspeed != speed)
+	{
+		newspeed /= speed;
+		ScaleVector(vecVelocity, newspeed);
+	}
+}
