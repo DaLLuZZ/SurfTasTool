@@ -38,8 +38,8 @@ public void ShowTrajectory(int client)
         for (int j = 0; j < 3; j++)
             switch (g_iTrajectoryMode)
             {
-                case TRAJECTORYMODE_MAX: framepos[j] += VEC_HULL_MAX;
-                case TRAJECTORYMODE_MIN: framepos[j] += VEC_HULL_MIN;
+                case TRAJECTORYMODE_MAX: framepos[j] += VEC_HULL_MAX[j];
+                case TRAJECTORYMODE_MIN: framepos[j] += VEC_HULL_MIN[j];
             }
 
         if (i == g_iSelectedTick)
