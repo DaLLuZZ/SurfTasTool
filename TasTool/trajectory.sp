@@ -7,6 +7,36 @@ int g_iTrajectoryMode;
 #define TRAJECTORYMODE_DEFAULT 0
 #define TRAJECTORYMODE_MAX 1
 #define TRAJECTORYMODE_MIN 2
+#define TRAJECTORYMODE_2 3
+#define TRAJECTORYMODE_3 4
+#define TRAJECTORYMODE_4 5
+#define TRAJECTORYMODE_5 6
+#define TRAJECTORYMODE_6 7
+#define TRAJECTORYMODE_7 8
+
+/*
+
+Player BBox
+
+       7 ____________ 8        1 <=> MIN
+     / |             /|        8 <=> MAX
+    /  |            / |
+   /   |           /  |
+  /    |          /   |        (xyz) - right
+ /     |         /    |
+5 ____________ 6      |
+|      |       |      |
+|      |       |      |
+|      |       |      |        z
+|      3 _ _ _ | _ _  4        ^     y
+|     /        |     /         |    ^
+|    /         |    /          |   /
+|   /          |   /           |  /
+|  /           |  /            | /
+| /            | /             |/
+1 ____________ 2               *- - - - - - - - > x
+
+*/
 
 // Todo: draw not in one frame but separate to several
 // https://developer.valvesoftware.com/wiki/Temporary_Entity
@@ -35,12 +65,45 @@ public void ShowTrajectory(int client)
         for (int j = 0; j < 3; j++)
             framepos[j] = Frame.pos[j];
 
+        // Get Player BBox
         for (int j = 0; j < 3; j++)
             switch (g_iTrajectoryMode)
             {
                 case TRAJECTORYMODE_MAX: framepos[j] += VEC_HULL_MAX[j];
                 case TRAJECTORYMODE_MIN: framepos[j] += VEC_HULL_MIN[j];
+                case TRAJECTORYMODE_4: framepos[j] += -VEC_HULL_MIN[j];
             }
+        switch (g_iTrajectoryMode)
+        {
+            case TRAJECTORYMODE_2:
+            {
+                framepos[0] += -VEC_HULL_MIN[0];
+                framepos[1] += VEC_HULL_MIN[1];
+            }
+            case TRAJECTORYMODE_3:
+            {
+                framepos[0] += VEC_HULL_MIN[0];
+                framepos[1] += -VEC_HULL_MIN[1];
+            }
+            case TRAJECTORYMODE_5:
+            {
+                framepos[0] += -VEC_HULL_MAX[0];
+                framepos[1] += -VEC_HULL_MAX[1];
+                framepos[2] += VEC_HULL_MAX[2];
+            }
+            case TRAJECTORYMODE_6:
+            {
+                framepos[0] += VEC_HULL_MAX[0];
+                framepos[1] += -VEC_HULL_MAX[1];
+                framepos[2] += VEC_HULL_MAX[2];
+            }
+            case TRAJECTORYMODE_7:
+            {
+                framepos[0] += -VEC_HULL_MAX[0];
+                framepos[1] += VEC_HULL_MAX[1];
+                framepos[2] += VEC_HULL_MAX[2];
+            }
+        }
 
         if (i == g_iSelectedTick)
             TE_SetupBeamPoints(pos, framepos, g_iBeamSprite, g_iHaloSprite, 0, 0, 1.0, 0.5, 0.5, 2, 0.0, view_as<int>({255, 0, 0, 255}), 0);
