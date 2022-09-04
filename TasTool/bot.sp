@@ -182,9 +182,14 @@ public void BotPrediction(int &buttons, float angles[3])
 		}
 	}
 
+	static float oldang[3];
+
 	// apply inputs for current frame
 	buttons = Frame.buttons;
 	angles = Frame.ang;
+	SubtractVectors(Frame.ang, oldang, Frame.angRel);
+	for (int i = 0; i < 3; i++)
+		oldang[i] = Frame.ang[i];
 
 	g_hFrames.SetArray(g_iPredictionTick, Frame, sizeof(FrameInfo));
 
