@@ -10,6 +10,8 @@ float VEC_DUCK_HULL_MIN[] = {-16.0, -16.0, 0.0 };
 float VEC_DUCK_HULL_MAX[] = { 16.0, 16.0, 54.0 };
 float VEC_DUCK_VIEW[] = { 0.0, 0.0, 46.0 };
 
+#define CS_PLAYER_SPEED_RUN 260.0
+
 //
 // Calculate forward & side components to make fakeclient react on forced movement (walk) buttons
 // Called when buttons had been already applied to fakeclient in OnPlayerRunCmd (CBasePlayer::PlayerRunCommand)
@@ -76,8 +78,34 @@ public float GetPerfectGamma(float speed)
 {
 	float accelspeed = sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed);
 
-	if (sv_maxspeed - accelspeed >= speed)
+	if (CS_PLAYER_SPEED_RUN - accelspeed >= speed)
 		return 90.0;
 
-	return RadToDeg(ArcCosine((sv_maxspeed - accelspeed) / speed));
+	return RadToDeg(ArcCosine((CS_PLAYER_SPEED_RUN - accelspeed) / speed));
 }
+
+/*
+First
+void CGameMovement::StartGravity( void )
+{
+	float ent_gravity;
+	
+	if (player->GetGravity())
+		ent_gravity = player->GetGravity();
+	else
+		ent_gravity = 1.0;
+
+	// Add gravity so they'll be in the correct position during movement
+	// yes, this 0.5 looks wrong, but it's not.  
+	mv->m_vecVelocity[2] -= (ent_gravity * sv_gravity.GetFloat() * 0.5 * gpGlobals->frametime );
+	mv->m_vecVelocity[2] += player->GetBaseVelocity()[2] * gpGlobals->frametime;
+
+	Vector temp = player->GetBaseVelocity();
+	temp[ 2 ] = 0;
+	player->SetBaseVelocity( temp );
+
+	CheckVelocity();
+}
+
+Second Friction
+*/
