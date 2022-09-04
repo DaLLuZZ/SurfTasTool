@@ -91,6 +91,8 @@ move->m_flClientMaxSpeed		= player->m_flMaxspeed;
 ProcessMovement
 mv->m_flMaxSpeed = pPlayer->GetPlayerMaxSpeed();
 
+NOW mv->m_flMaxSpeed = CS_PLAYER_SPEED_RUN (260.0)
+
 PlayerMove -> CheckParameters
 	if ( player->GetMoveType() != MOVETYPE_ISOMETRIC &&
 		 player->GetMoveType() != MOVETYPE_NOCLIP &&
