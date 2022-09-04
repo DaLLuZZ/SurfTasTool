@@ -151,7 +151,7 @@ PrintToConsoleAll("speedang[1]: %f; speed: %f", speedang[1], speed);
 			float newspeed = Friction(velTemp); // friction should be applied before getting perfect gamma
 			float gamma = GetPerfectGamma(newspeed); // gamma is an optimal angle (deg) between wishdir and current velocity vectors
 PrintToConsoleAll("newspeed: %f; gamma: %f", newspeed, gamma);
-PrintToConsoleAll("accelspeed: %f", sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed);
+PrintToConsoleAll("accelspeed: %f", sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed));
 			if (gamma == 0.0 && speed < 259.0)
 			{
 				Frame.buttons &= ~(IN_MOVELEFT | IN_MOVERIGHT);
