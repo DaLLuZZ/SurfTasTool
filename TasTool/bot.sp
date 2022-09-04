@@ -152,14 +152,14 @@ public void BotPrediction(int &buttons, float angles[3])
 			float gamma = GetPerfectGamma(newspeed); // gamma is an optimal angle (deg) between wishdir and current velocity vectors
 			if (gamma == 0.0)
 			{
-				Frame.buttons ^= IN_MOVELEFT | IN_MOVERIGHT;
+				Frame.buttons &= ~(IN_MOVELEFT | IN_MOVERIGHT);
 				Frame.buttons |= IN_FORWARD;
 				Frame.ang[1] = speedang[1];
 			}
 			else
 			{
 				epsilon = 45.0 - gamma; // epsilon is an angle between optimal viewangle and current velocity vector
-				Frame.buttons ^= IN_FORWARD;
+				Frame.buttons &= ~IN_FORWARD;
 
 				if (Frame.buttons & IN_MOVELEFT)
 					Frame.ang[1] = speedang[1] - epsilon;
