@@ -250,7 +250,7 @@ public void AddFrames(int toadd, bool turncopy)
 	for (int i = g_hFrames.Length - toadd - 1; i >= 0; i--)
 	{
 		g_hFrames.GetArray(i, testFrame, sizeof(FrameInfo));
-		if (!Frame.autostrafe)
+		if (!testFrame.autostrafe)
 		{
 			predictiontick = i;
 			break;
