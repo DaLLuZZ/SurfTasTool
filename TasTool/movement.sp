@@ -85,6 +85,10 @@ public float GetPerfectGamma(float speed)
 }
 
 /*
+SetupMove
+move->m_flClientMaxSpeed		= player->m_flMaxspeed;
+
+
 First
 void CGameMovement::StartGravity( void )
 {
