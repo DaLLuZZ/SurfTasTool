@@ -140,7 +140,7 @@ public void BotPrediction(int &buttons, float angles[3])
 
 	if (Frame.autostrafe)
 	{
-		float delta, epsilon;
+		float epsilon;
 
 		if (GetEntityFlags(g_iBot) & FL_ONGROUND)
 		{
@@ -148,18 +148,35 @@ public void BotPrediction(int &buttons, float angles[3])
 			float velTemp[3];
 			for (int i = 0; i < 3; i++)
 				velTemp[i] = Frame.vel[i];
-			float newspeed = Friction(velTemp); // Friction should be applied before getting perfect gamma
-			delta = GetPerfectGamma(newspeed); // delta (equals to gamma) is an optimal angle (deg) between wishdir and current velocity vectors
+			float newspeed = Friction(velTemp); // friction should be applied before getting perfect gamma
+			float gamma = GetPerfectGamma(newspeed); // gamma is an optimal angle (deg) between wishdir and current velocity vectors
+			if (gamma == 0.0)
+			{
+				Frame.buttons ~= IN_MOVELEFT | IN_MOVERIGHT | ~IN_FORWARD;
+				Frame.ang[1] = speedang[1];
+			}
+			else
+			{
+				epsilon = 45.0 - gamma; // epsilon is an angle between optimal viewangle and current velocity vector
+				Frame.buttons ~= IN_FORWARD;
+
+				if (Frame.buttons & IN_MOVELEFT)
+					Frame.ang[1] = speedang[1] - epsilon;
+				else if (Frame.buttons & IN_MOVERIGHT)
+					Frame.ang[1] = speedang[1] + epsilon;
+			}
 		}
 		else
-			delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
+		{
+			// we are in air, so we should autostrafe
+			float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
+			epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
 
-		epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
-
-		if (Frame.buttons & IN_MOVELEFT)
-			Frame.ang[1] = speedang[1] - epsilon;
-		else if (Frame.buttons & IN_MOVERIGHT)
-			Frame.ang[1] = speedang[1] + epsilon;
+			if (Frame.buttons & IN_MOVELEFT)
+				Frame.ang[1] = speedang[1] - epsilon;
+			else if (Frame.buttons & IN_MOVERIGHT)
+				Frame.ang[1] = speedang[1] + epsilon;
+		}
 	}
 
 	// apply inputs for current frame
