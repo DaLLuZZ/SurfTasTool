@@ -137,7 +137,7 @@ public void BotPrediction(int &buttons, float angles[3])
 	GetVectorAngles(Frame.vel, speedang);
 
 	Frame.ang[0] = speedang[0]; // apply view pitch (let's look in the direction of the current velocity vector)
-PrintToConsoleAll("speedang[1]: %f", speedang[1]);
+PrintToConsoleAll("speedang[1]: %f; speed: %f", speedang[1], speed);
 	if (Frame.autostrafe)
 	{
 		float epsilon;
@@ -151,6 +151,7 @@ PrintToConsoleAll("speedang[1]: %f", speedang[1]);
 			float newspeed = Friction(velTemp); // friction should be applied before getting perfect gamma
 			float gamma = GetPerfectGamma(newspeed); // gamma is an optimal angle (deg) between wishdir and current velocity vectors
 PrintToConsoleAll("newspeed: %f; gamma: %f", newspeed, gamma);
+PrintToConsoleAll("accelspeed: %f", sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed);
 			if (gamma == 0.0 && speed < 259.0)
 			{
 				Frame.buttons &= ~(IN_MOVELEFT | IN_MOVERIGHT);
@@ -160,7 +161,6 @@ PrintToConsoleAll("newspeed: %f; gamma: %f", newspeed, gamma);
 			else
 			{
 				epsilon = 45.0 - gamma; // epsilon is an angle between optimal viewangle and current velocity vector
-				Frame.buttons &= ~IN_FORWARD;
 
 				if (Frame.buttons & IN_MOVELEFT)
 					Frame.ang[1] = speedang[1] - epsilon;
@@ -173,6 +173,8 @@ PrintToConsoleAll("newspeed: %f; gamma: %f", newspeed, gamma);
 			// we are in air, so we should autostrafe
 			float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
 			epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
+
+			Frame.buttons &= ~IN_FORWARD;
 
 			if (Frame.buttons & IN_MOVELEFT)
 				Frame.ang[1] = speedang[1] - epsilon;
