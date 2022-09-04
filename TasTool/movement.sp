@@ -88,6 +88,77 @@ public float GetPerfectGamma(float speed)
 SetupMove
 move->m_flClientMaxSpeed		= player->m_flMaxspeed;
 
+ProcessMovement
+mv->m_flMaxSpeed = pPlayer->GetPlayerMaxSpeed();
+
+PlayerMove -> CheckParameters
+	if ( player->GetMoveType() != MOVETYPE_ISOMETRIC &&
+		 player->GetMoveType() != MOVETYPE_NOCLIP &&
+		 player->GetMoveType() != MOVETYPE_OBSERVER )
+	{
+		float spd;
+		float maxspeed;
+
+		spd = ( mv->m_flForwardMove * mv->m_flForwardMove ) +
+			  ( mv->m_flSideMove * mv->m_flSideMove ) +
+			  ( mv->m_flUpMove * mv->m_flUpMove );
+
+		maxspeed = mv->m_flClientMaxSpeed;
+		if ( maxspeed != 0.0 )
+		{
+			mv->m_flMaxSpeed = MIN( maxspeed, mv->m_flMaxSpeed );
+		}
+
+		// Slow down by the speed factor
+		float flSpeedFactor = 1.0f;
+		if (player->m_pSurfaceData)
+		{
+			flSpeedFactor = player->m_pSurfaceData->game.maxSpeedFactor;
+		}
+
+		// If we have a constraint, slow down because of that too.
+		float flConstraintSpeedFactor = ComputeConstraintSpeedFactor();
+		if (flConstraintSpeedFactor < flSpeedFactor)
+			flSpeedFactor = flConstraintSpeedFactor;
+
+		mv->m_flMaxSpeed *= flSpeedFactor;
+
+		if ( g_bMovementOptimizations )
+		{
+			// Same thing but only do the sqrt if we have to.
+			if ( ( spd != 0.0 ) && ( spd > mv->m_flMaxSpeed*mv->m_flMaxSpeed ) )
+			{
+				float fRatio = mv->m_flMaxSpeed / sqrt( spd );
+				mv->m_flForwardMove *= fRatio;
+				mv->m_flSideMove    *= fRatio;
+				mv->m_flUpMove      *= fRatio;
+			}
+		}
+		else
+		{
+			spd = sqrt( spd );
+			if ( ( spd != 0.0 ) && ( spd > mv->m_flMaxSpeed ) )
+			{
+				float fRatio = mv->m_flMaxSpeed / spd;
+				mv->m_flForwardMove *= fRatio;
+				mv->m_flSideMove    *= fRatio;
+				mv->m_flUpMove      *= fRatio;
+			}
+		}
+	}
+
+FullWalkMove -> StartGravity
+
+FullWalkMove -> Friction
+
+FullWalkMove -> CheckVelocity (just checks sv_maxvelocity on axes)
+
+WalkMove
+wishvel and wishspeed clampled to mv->m_flMaxSpeed
+mv->m_vecVelocity[2] = 0;
+
+Accelerate()
+
 
 First
 void CGameMovement::StartGravity( void )
