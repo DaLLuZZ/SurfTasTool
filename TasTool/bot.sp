@@ -93,6 +93,9 @@ public void BotStartPrediction(int starttick)
 	if (!g_hFrames || starttick >= g_hFrames.Length)
 		return;
 
+	if (starttick < 0)
+		starttick = 0;
+
 	// Check if there is a bot to use
 	FindBotIndex();
 	if (g_iBot < 1)
