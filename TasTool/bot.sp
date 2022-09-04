@@ -107,7 +107,7 @@ public void BotStartPrediction(int starttick)
 	{
 		FrameInfo Frame;
 		g_hFrames.GetArray(starttick, Frame, sizeof(FrameInfo));
-		SubtractVectors(Frame.ang, Frame.angRel, Frame.ang);
+		AddVectors(Frame.ang, Frame.angRel, Frame.ang);
 		TeleportEntity(g_iBot, Frame.pos, Frame.ang, Frame.vel);
 	}
 
