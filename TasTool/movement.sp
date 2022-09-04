@@ -79,7 +79,7 @@ public float GetPerfectGamma(float speed)
 	float accelspeed = sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed);
 
 	if (CS_PLAYER_SPEED_RUN - accelspeed >= speed)
-		return 90.0;
+		return 0.0;
 
 	return RadToDeg(ArcCosine((CS_PLAYER_SPEED_RUN - accelspeed) / speed));
 }
