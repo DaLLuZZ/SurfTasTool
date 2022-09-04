@@ -245,7 +245,18 @@ public void AddFrames(int toadd, bool turncopy)
 		g_hFrames.PushArray(Frame, sizeof(FrameInfo));
 	}
 
-	BotStartPrediction(g_hFrames.Length - toadd - 1);
+	int predictiontick;
+	FrameInfo testFrame;
+	for (int i = g_hFrames.Length - toadd - 1; i >= 0; i--)
+	{
+		g_hFrames.GetArray(i, testFrame, sizeof(FrameInfo));
+		if (!Frame.autostrafe)
+		{
+			predictiontick = i;
+			break;
+		}
+	}
+	BotStartPrediction(predictiontick);
 }
 
 public void RemoveFrames(int toremove)
