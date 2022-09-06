@@ -4,6 +4,7 @@
 
 #include <sourcemod>
 #include <sdktools>
+#include <smlib>
 
 #pragma newdecls required
 
@@ -108,12 +109,33 @@ public void OnGameFrame()
 }
 
 /**
+ * Prevent taking damage
+ */
+public Action Hook_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype)
+{
+	return Plugin_Handled;
+}
+
+public void OnClientPutInServer(int client)
+{
+	SDKHook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
+}
+
+public void OnClientDisconnect(int client)
+{
+	SDKUnhook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
+}
+
+/**
  * CBasePlayer::PlayerRunCommand hooked
  */
 public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
 {
-//	if (!IsValidClient(client))
-//		return Plugin_Handled;
+	if (!IsValidClient(client))
+		return Plugin_Handled;
+
+	if (weapon != CSWeapon_NONE)
+		Client_RemoveAllWeapons(client);
 
 	// Client is not bot
 	if (!IsFakeClient(client))
