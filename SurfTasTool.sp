@@ -128,12 +128,12 @@ public void OnClientDisconnect(int client)
 /**
  * CBasePlayer::PlayerRunCommand hooked
  */
-public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], CSWeaponID &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
+public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
 {
 	if (!IsValidClient(client))
 		return Plugin_Handled;
 
-	if (weapon != CSWeapon_NONE)
+	if (view_as<CSWeaponID>(weapon) != CSWeapon_NONE)
 		Client_RemoveAllWeapons(client);
 
 	// Client is not bot
