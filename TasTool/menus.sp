@@ -221,7 +221,7 @@ public void AddFrames(int toadd, bool turncopy)
 		else
 			Frame.angRel = {0.0, 0.0, 0.0};
 
-		if (Frame.autostrafe)
+		if (Frame.autostrafe && !g_bCopyTurn) // if we copy "cmd" from previous tick, we change strafedir every tick
 		{
 			// TODO: make it customizable (N left turns/M right turns...)
 			if (Frame.buttons & IN_MOVELEFT)
