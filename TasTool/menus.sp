@@ -221,7 +221,7 @@ public void AddFrames(int toadd, bool turncopy)
 		else
 			Frame.angRel = {0.0, 0.0, 0.0};
 
-		if (Frame.autostrafe)
+		if (Frame.autostrafe && !g_bCopyTurn) // if we copy "cmd" from previous tick, we change strafedir every tick
 		{
 			// TODO: make it customizable (N left turns/M right turns...)
 			if (Frame.buttons & IN_MOVELEFT)
@@ -245,7 +245,18 @@ public void AddFrames(int toadd, bool turncopy)
 		g_hFrames.PushArray(Frame, sizeof(FrameInfo));
 	}
 
-	BotStartPrediction(g_hFrames.Length - toadd - 1);
+	int predictiontick;
+	FrameInfo testFrame;
+	for (int i = g_hFrames.Length - toadd - 1; i >= 0; i--)
+	{
+		g_hFrames.GetArray(i, testFrame, sizeof(FrameInfo));
+		if (!testFrame.autostrafe)
+		{
+			predictiontick = i;
+			break;
+		}
+	}
+	BotStartPrediction(predictiontick);
 }
 
 public void RemoveFrames(int toremove)

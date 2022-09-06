@@ -4,6 +4,9 @@
 
 #include <sourcemod>
 #include <sdktools>
+#include <sdkhooks>
+#include <cstrike>
+#include <smlib>
 
 #pragma newdecls required
 
@@ -85,6 +88,7 @@ public Action Event_OnPlayerSpawn(Event hEvent, const char[] szName, bool bDontB
 
 public void OnClientPutInServer(int client)
 {
+	SDKHook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
 	if (!IsFakeClient(client))
 		CreateTimer(0.1, HudTextTimer, GetClientUserId(client), TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 }
@@ -92,7 +96,8 @@ public void OnClientPutInServer(int client)
 public bool IsValidClient(int client)
 {
 	if (client > 0 && client <= MaxClients && IsClientInGame(client))
-			return true;
+		return true;
+
 	return false;
 }
 
@@ -100,7 +105,7 @@ public void OnGameFrame()
 {
 	for (int client = 1; client <= MaxClients; client++)
 	{
-	//	if (IsValidClient(client))
+		if (IsValidClient(client))
 		{
 
 		}
@@ -108,12 +113,28 @@ public void OnGameFrame()
 }
 
 /**
+ * Prevent taking damage
+ */
+public Action Hook_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype)
+{
+	return Plugin_Handled;
+}
+
+public void OnClientDisconnect(int client)
+{
+	SDKUnhook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
+}
+
+/**
  * CBasePlayer::PlayerRunCommand hooked
  */
 public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
 {
-//	if (!IsValidClient(client))
-//		return Plugin_Handled;
+	if (!IsValidClient(client))
+		return Plugin_Handled;
+
+	if (view_as<CSWeaponID>(weapon) != CSWeapon_NONE)
+		Client_RemoveAllWeapons(client);
 
 	// Client is not bot
 	if (!IsFakeClient(client))

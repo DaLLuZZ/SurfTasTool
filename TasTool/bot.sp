@@ -93,6 +93,9 @@ public void BotStartPrediction(int starttick)
 	if (!g_hFrames || starttick >= g_hFrames.Length)
 		return;
 
+	if (starttick < 0)
+		starttick = 0;
+
 	// Check if there is a bot to use
 	FindBotIndex();
 	if (g_iBot < 1)
@@ -107,7 +110,7 @@ public void BotStartPrediction(int starttick)
 	{
 		FrameInfo Frame;
 		g_hFrames.GetArray(starttick, Frame, sizeof(FrameInfo));
-		SubtractVectors(Frame.ang, Frame.angRel, Frame.ang);
+		AddVectors(Frame.ang, Frame.angRel, Frame.ang);
 		TeleportEntity(g_iBot, Frame.pos, Frame.ang, Frame.vel);
 	}
 
@@ -136,20 +139,60 @@ public void BotPrediction(int &buttons, float angles[3])
 	float speedang[3]; // angles of current velocity vector
 	GetVectorAngles(Frame.vel, speedang);
 
-	Frame.ang[0] = speedang[0]; // apply view pitch (let's look in the direction of the velocity vector)
+	Frame.ang[0] = speedang[0]; // apply view pitch (let's look in the direction of the current velocity vector)
 
 	if (Frame.autostrafe)
 	{
-		float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
-		float epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
+		float epsilon;
 
-		// TODO: Test on low sv_airaccelerate (left/right (+/-)) and make it depend on buttons (+A/+W)
-		Frame.ang[1] = speedang[1] + epsilon; // left
+		if (GetEntityFlags(g_iBot) & FL_ONGROUND)
+		{
+			// if we are on ground, we are trying to get a maximal prespeed
+			float velTemp[3];
+			for (int i = 0; i < 3; i++)
+				velTemp[i] = Frame.vel[i];
+			float newspeed = Friction(velTemp); // friction should be applied before getting perfect gamma
+			float gamma = GetPerfectGamma(newspeed); // gamma is an optimal angle (deg) between wishdir and current velocity vectors
+
+			if (gamma == 0.0)
+			{
+				Frame.buttons &= ~(IN_MOVELEFT | IN_MOVERIGHT);
+				Frame.buttons |= IN_FORWARD;
+				Frame.ang[1] = speedang[1];
+			}
+			else
+			{
+				epsilon = 45.0 - gamma; // epsilon is an angle between optimal viewangle and current velocity vector
+
+				if (Frame.buttons & IN_MOVELEFT)
+					Frame.ang[1] = speedang[1] - epsilon;
+				else if (Frame.buttons & IN_MOVERIGHT)
+					Frame.ang[1] = speedang[1] + epsilon;
+			}
+		}
+		else
+		{
+			// we are in air, so we should autostrafe
+			float delta = GetPerfectDelta(speed); // delta is an optimal angle (deg) between wishdir and current velocity vectors
+			epsilon = 90.0 - delta; // epsilon is an angle between optimal viewangle and current velocity vector
+
+			Frame.buttons &= ~IN_FORWARD;
+
+			if (Frame.buttons & IN_MOVELEFT)
+				Frame.ang[1] = speedang[1] - epsilon;
+			else if (Frame.buttons & IN_MOVERIGHT)
+				Frame.ang[1] = speedang[1] + epsilon;
+		}
 	}
+
+	static float oldang[3];
 
 	// apply inputs for current frame
 	buttons = Frame.buttons;
 	angles = Frame.ang;
+	SubtractVectors(Frame.ang, oldang, Frame.angRel);
+	for (int i = 0; i < 3; i++)
+		oldang[i] = Frame.ang[i];
 
 	g_hFrames.SetArray(g_iPredictionTick, Frame, sizeof(FrameInfo));
 

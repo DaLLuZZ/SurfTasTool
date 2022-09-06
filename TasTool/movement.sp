@@ -10,6 +10,8 @@ float VEC_DUCK_HULL_MIN[] = {-16.0, -16.0, 0.0 };
 float VEC_DUCK_HULL_MAX[] = { 16.0, 16.0, 54.0 };
 float VEC_DUCK_VIEW[] = { 0.0, 0.0, 46.0 };
 
+#define CS_PLAYER_SPEED_RUN 260.0
+
 //
 // Calculate forward & side components to make fakeclient react on forced movement (walk) buttons
 // Called when buttons had been already applied to fakeclient in OnPlayerRunCmd (CBasePlayer::PlayerRunCommand)
@@ -40,4 +42,44 @@ public float GetPerfectDelta(float speed)
 		return 90.0; // return 90.0 because ArcCosine(0) is 90 degrees
 
 	return RadToDeg(ArcCosine((sv_air_max_wishspeed - accelspeed) / speed));
+}
+
+//
+// Reimplementation of CGameMovement::Friction
+//
+public float Friction(float vecVelocity[3])
+{
+	float speed = SquareRoot(vecVelocity[0] * vecVelocity[0] + vecVelocity[1] * vecVelocity[1]);
+
+	if (speed < 0.1)
+		return 0.0;
+
+	float newspeed = speed - ((speed < sv_stopspeed) ? sv_stopspeed : speed) * sv_friction * TICK_INTERVAL;
+
+	if (newspeed < 0.0)
+		newspeed = 0.0;
+
+	float fret = newspeed;
+
+	if (newspeed != speed)
+	{
+		newspeed /= speed;
+		ScaleVector(vecVelocity, newspeed);
+	}
+
+	return fret;
+}
+
+//
+// Calculates perfect gamma angle (deg) for prespeed
+// Friction should be applied on speed before calling GetPerfectGamma
+//
+public float GetPerfectGamma(float speed)
+{
+	float accelspeed = sv_accelerate * TICK_INTERVAL * (sv_maxspeed > 250.0 ? 250.0 : sv_maxspeed);
+
+	if (CS_PLAYER_SPEED_RUN - accelspeed >= speed)
+		return 0.0; // return 90.0 because ArcCosine(1) is 0 degrees
+
+	return RadToDeg(ArcCosine((CS_PLAYER_SPEED_RUN - accelspeed) / speed));
 }
