@@ -17,6 +17,9 @@ public void CreateCommands()
 
 	RegConsoleCmd("sm_set_float", Command_SetFloatValue, "Use to set global float value");
 	RegConsoleCmd("f", Command_SetFloatValue, "Use to set global float value");
+
+	RegConsoleCmd("sm_startpos", Command_SetStartPos, "Use to CHANGE the start position of TAS");
+	RegConsoleCmd("sm_startang", Command_SetStartAng, "Use to CHANGE the start angles of TAS");
 }
 
 public Action Command_StartRecording(int client, int args)
@@ -152,5 +155,17 @@ public Action Command_SetFloatValue(int client, int args)
 	else
 		g_fFloatValue = 0.0;
 
+	return Plugin_Handled;
+}
+
+public Action Command_SetStartPos(int client, int args)
+{
+	GetClientAbsOrigin(client, g_Header.pos);
+	return Plugin_Handled;
+}
+
+public Action Command_SetStartAng(int client, int args)
+{
+	GetClientEyeAngles(client, g_Header.ang);
 	return Plugin_Handled;
 }
