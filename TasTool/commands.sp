@@ -4,12 +4,19 @@ public void CreateCommands()
 	RegConsoleCmd("sm_record_stop", Command_StopRecording, "Stops recording of player movement");
 	RegConsoleCmd("sm_record_totas", Command_StoreRecordToTas, "Stores recorded frames to tas");
 	RegConsoleCmd("sm_tas_play", Command_BotStartRun, "Starts run of a bot");
+
 	RegConsoleCmd("sm_tick_select", Command_SelectTick, "Use it to select a tick number");
+	RegConsoleCmd("t", Command_SelectTick, "Use it to select a tick number");
+
 	RegConsoleCmd("sm_prediction_start", Command_BotStartPrediction, "Use it to start trajectory prediction");
+	RegConsoleCmd("p", Command_BotStartPrediction, "Use it to start trajectory prediction");
+
 	RegConsoleCmd("sm_tas_menu", Command_OpenTasMenu, "Use it to open control menu");
 	RegConsoleCmd("sm_goto", Command_GoTo, "Use it to teleport to selected tick");
 	RegConsoleCmd("sm_set_int", Command_SetIntValue, "Use to set global int value");
+
 	RegConsoleCmd("sm_set_float", Command_SetFloatValue, "Use to set global float value");
+	RegConsoleCmd("f", Command_SetFloatValue, "Use to set global float value");
 }
 
 public Action Command_StartRecording(int client, int args)
