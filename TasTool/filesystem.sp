@@ -1,4 +1,10 @@
-public void OpenTasMenu(int client)
+public void CreateMapDir()
 {
-	Menu menu = new Menu(TasMainMenuHandler);
+	char szPath[256];
+	char szMap[32];
+	GetCurrentMap(szMap, sizeof(szMap));
 
+	BuildPath(Path_SM, szPath, sizeof(szPath), "data/SurfTasTool/%s", szMap);
+	if (!DirExists(szPath))
+		CreateDirectory(szPath, 511);
+}
