@@ -1,4 +1,4 @@
-#define MAXFILESCOUNT (1 << 10)
+#define MAXFILESCOUNT (1 << 7)
 
 public void CreateMapDir()
 {
@@ -79,4 +79,62 @@ public void ReadFileToCurrentTAS(char szPath[])
 	}
 
 	File.Close();
+}
+
+public void FileManagerInit(int client)
+{
+	char szPath[256];
+	char szMap[32];
+	GetCurrentMap(szMap, sizeof(szMap));
+
+	BuildPath(Path_SM, szPath, sizeof(szPath), "data/SurfTasTool/%s", szMap);
+
+	if (!DirExists(szPath))
+		return;
+
+	DirectoryListing MapDir = OpenDirectory(szPath);
+	if (!MapDir)
+		return;
+
+	FileType type;
+	char szBuffer[256];
+	Menu menu = new Menu(FileManagerHandler);
+	menu.SetTitle(szMap);
+
+	while (ReadDirEntry(MapDir, szBuffer, sizeof(szBuffer), type))
+	{
+		if (StrEqual(szBuffer, "..") || StrEqual(szBuffer, "."))
+			continue;
+
+		if (type == FileType_File)
+			menu.AddItem(szBuffer, szBuffer);
+		else if (type == FileType_Directory)
+		{
+		}
+	}
+
+	delete MapDir;
+
+	menu.Display(client, MENU_TIME_FOREVER);
+}
+
+public int FileManagerHandler(Menu menu, MenuAction action, int param1, int param2)
+{
+	switch (action)
+	{
+		case MenuAction_Select:
+		{
+			char szName[32];
+			int style;
+			GetItem(param2, szName, sizeof(szName), style, szName, sizeof(szName), -1);
+			FileManagerInit(param1);
+		}
+		case MenuAction_Cancel:
+		{
+			if (param2 == MenuCancel_Exit)
+				OpenTasMenu(param1);
+		}
+		case MenuAction_End:
+			delete menu;
+	}
 }
