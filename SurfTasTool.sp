@@ -53,6 +53,7 @@ float g_fFloatValue;
 int g_iIntValue;
 
 #include "TasTool/convars.sp"
+#include "TasTool/filesystem.sp"
 #include "TasTool/movement.sp"
 #include "TasTool/bot.sp"
 #include "TasTool/recording.sp"
