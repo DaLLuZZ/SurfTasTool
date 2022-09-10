@@ -44,7 +44,7 @@ public void WriteCurrentTAS()
 	hFile.Close();
 }
 
-public void ReadFileToCurrentTAS(char szPath[])
+public void ReadFileToCurrentTAS(char[] szPath)
 {
 	if (!FileExists(szPath))
 		return;
@@ -128,6 +128,8 @@ public int FileManagerHandler(Menu menu, MenuAction action, int param1, int para
 			int style;
 			GetItem(param2, szName, sizeof(szName), style, szName, sizeof(szName), -1);
 			char szPath[256];
+			char szMap[32];
+			GetCurrentMap(szMap, sizeof(szMap));
 			BuildPath(Path_SM, szPath, sizeof(szPath), "data/SurfTasTool/%s/%s", szMap, szName);
 			ReadFileToCurrentTAS(szPath);
 			FileManagerInit(param1);
