@@ -8,7 +8,7 @@ public void CreateMapDir()
 
 	BuildPath(Path_SM, szPath, sizeof(szPath), "data/SurfTasTool/%s", szMap);
 	if (!DirExists(szPath))
-		CreateDirectory(szPath, 511);
+		CreateDirectory(szPath, ((FPERM_O_READ|FPERM_O_EXEC)|(FPERM_G_EXEC|FPERM_G_READ)|(FPERM_U_EXEC|FPERM_U_WRITE|FPERM_U_READ)));
 }
 
 public void WriteCurrentTAS()
