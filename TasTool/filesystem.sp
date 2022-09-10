@@ -135,7 +135,7 @@ public int FileManagerHandler(Menu menu, MenuAction action, int param1, int para
 		case MenuAction_Cancel:
 		{
 			if (param2 == MenuCancel_Exit)
-				OpenTasMenu(param1);
+				OpenFileMenu(param1);
 		}
 		case MenuAction_End:
 			delete menu;
