@@ -25,6 +25,9 @@ public void WriteCurrentTAS()
 
 	File hFile = OpenFile(szPath, "wb");
 
+	if (!hFile)
+		return;
+
 	hFile.Write(g_Header.pos, 3, 4);
 	hFile.Write(g_Header.ang, 3, 4);
 	hFile.WriteInt32(view_as<int>(TICKRATE));
