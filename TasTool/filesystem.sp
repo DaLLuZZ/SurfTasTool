@@ -25,23 +25,23 @@ public void WriteCurrentTAS()
 
 	File hFile = OpenFile(szPath, "wb");
 
-	File.Write(g_Header.pos, 3, 4);
-	File.Write(g_Header.ang, 3, 4);
-	File.WriteInt32(view_as<int>(TICKRATE));
-	File.WriteInt32(g_hFrames.Length);
+	hFile.Write(g_Header.pos, 3, 4);
+	hFile.Write(g_Header.ang, 3, 4);
+	hFile.WriteInt32(view_as<int>(TICKRATE));
+	hFile.WriteInt32(g_hFrames.Length);
 
 	FrameInfo Frame;
 
 	for (int i = 0; i < g_hFrames.Length; i++)
 	{
 		g_hFrames.GetArray(i, Frame, sizeof(FrameInfo));
-		File.WriteInt32(Frame.buttons);
-		File.Write(view_as<int>(Frame.angRel), 3, 4);
-		File.Write(view_as<int>(Frame.ang), 3, 4);
-		File.WriteInt32(Frame.autostrafe);
+		hFile.WriteInt32(Frame.buttons);
+		hFile.Write(view_as<int>(Frame.angRel), 3, 4);
+		hFile.Write(view_as<int>(Frame.ang), 3, 4);
+		hFile.WriteInt32(Frame.autostrafe);
 	}
 
-	File.Close();
+	hFile.Close();
 }
 
 public void ReadFileToCurrentTAS(char szPath[])
@@ -59,10 +59,10 @@ public void ReadFileToCurrentTAS(char szPath[])
 
 	File hFile = OpenFile(szPath, "rb");
 
-	File.Read(g_Header.pos, 3, 4);
-	File.Read(g_Header.ang, 3, 4);
-	File.ReadInt32(len);
-	File.ReadInt32(view_as<int>(tick));
+	hFile.Read(g_Header.pos, 3, 4);
+	hFile.Read(g_Header.ang, 3, 4);
+	hFile.ReadInt32(len);
+	hFile.ReadInt32(view_as<int>(tick));
 
 	if (tick < TICKRATE - 0.1 || tick > TICKRATE + 0.1)
 		return;
@@ -71,14 +71,14 @@ public void ReadFileToCurrentTAS(char szPath[])
 
 	for (int i = 0; i < len; i++)
 	{
-		File.ReadInt32(Frame.buttons);
-		File.Read(view_as<int>(Frame.angRel), 3, 4);
-		File.Read(view_as<int>(Frame.ang), 3, 4);
-		File.ReadInt32(Frame.autostrafe);
+		hFile.ReadInt32(Frame.buttons);
+		hFile.Read(view_as<int>(Frame.angRel), 3, 4);
+		hFile.Read(view_as<int>(Frame.ang), 3, 4);
+		hFile.ReadInt32(Frame.autostrafe);
 		g_hFrames.PushArray(Frame, sizeof(FrameInfo));
 	}
 
-	File.Close();
+	hFile.Close();
 }
 
 public void FileManagerInit(int client)
