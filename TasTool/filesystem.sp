@@ -127,6 +127,9 @@ public int FileManagerHandler(Menu menu, MenuAction action, int param1, int para
 			char szName[32];
 			int style;
 			GetItem(param2, szName, sizeof(szName), style, szName, sizeof(szName), -1);
+			char szPath[256];
+			BuildPath(Path_SM, szPath, sizeof(szPath), "data/SurfTasTool/%s/%s", szMap, szName);
+			ReadFileToCurrentTAS(szPath);
 			FileManagerInit(param1);
 		}
 		case MenuAction_Cancel:
