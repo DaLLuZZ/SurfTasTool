@@ -68,7 +68,10 @@ public void ReadFileToCurrentTAS(char[] szPath)
 	hFile.ReadInt32(view_as<int>(tick));
 
 	if (tick < TICKRATE - 0.1 || tick > TICKRATE + 0.1)
+	{
+		PrintToConsoleAll("Invalid tick: %.2f vs %.2f", tick, TICKRATE);
 		return;
+	}
 
 	FrameInfo Frame;
 
