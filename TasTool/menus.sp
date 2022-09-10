@@ -10,6 +10,7 @@
  * * * * Edit single selected frame Relative Yaw menu (OpenEditFrameRelYawMenu)
  * * Trajectory Control Menu (OpenTrajectoryControlMenu)
  * * * Trajectory Mode Menu (OpenChangeTrajectoryModeMenu)
+ * * File Manager (FileManagerInit)
  */
 
 /**
@@ -22,7 +23,8 @@ public void OpenTasMenu(int client)
 	menu.SetTitle("Surf Tas");
 	menu.AddItem("0", "Helpers");
 	menu.AddItem("1", "Frames");
-	menu.AddItem("1", "Trajectory");
+	menu.AddItem("2", "Trajectory");
+	menu.AddItem("3", "Files");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -31,6 +33,8 @@ public void OpenTasMenu(int client)
  * Surf Tas
  * 1. Helpers
  * 2. Frames
+ * 3. Trajectory
+ * 4. Files
  */
 public int TasMainMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -43,6 +47,7 @@ public int TasMainMenuHandler(Menu menu, MenuAction action, int param1, int para
 				case 0: OpenTasHelpersMenu(param1);
 				case 1: OpenFrameControlMenu(param1);
 				case 2: OpenTrajectoryControlMenu(param1);
+				case 3: FileManagerInit(param1);
 			}
 		}
 		case MenuAction_End:
