@@ -78,6 +78,8 @@ public void OnMapStart()
 	// To draw trajectory
 	g_iBeamSprite = PrecacheModel("materials/sprites/laserbeam.vmt", true);
 	g_iHaloSprite = PrecacheModel("materials/sprites/halo.vmt", true);
+
+	CreateMapDir(); // filesystem
 }
 
 public Action Event_OnPlayerSpawn(Event hEvent, const char[] szName, bool bDontBroadcast)
