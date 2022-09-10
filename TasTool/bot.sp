@@ -21,6 +21,8 @@ public void FindBotIndex()
 			break;
 		}
 	}
+	if (g_iBot != -1)
+		Client_RemoveAllWeapons(g_iBot);
 }
 
 // Starts bot's run
