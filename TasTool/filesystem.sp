@@ -126,7 +126,7 @@ public int FileManagerHandler(Menu menu, MenuAction action, int param1, int para
 		{
 			char szName[32];
 			int style;
-			GetItem(param2, szName, sizeof(szName), style, szName, sizeof(szName), -1);
+			menu.GetItem(param2, szName, sizeof(szName), style, szName, sizeof(szName), -1);
 			char szPath[256];
 			char szMap[32];
 			GetCurrentMap(szMap, sizeof(szMap));
