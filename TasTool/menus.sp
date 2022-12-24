@@ -10,6 +10,8 @@
  * * * * Edit single selected frame Relative Yaw menu (OpenEditFrameRelYawMenu)
  * * Trajectory Control Menu (OpenTrajectoryControlMenu)
  * * * Trajectory Mode Menu (OpenChangeTrajectoryModeMenu)
+ * * File Menu (OpenFileMenu)
+ * * * FileManager (FileManagerInit)
  */
 
 /**
@@ -22,7 +24,8 @@ public void OpenTasMenu(int client)
 	menu.SetTitle("Surf Tas");
 	menu.AddItem("0", "Helpers");
 	menu.AddItem("1", "Frames");
-	menu.AddItem("1", "Trajectory");
+	menu.AddItem("2", "Trajectory");
+	menu.AddItem("3", "Files");
 
 	menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -31,6 +34,8 @@ public void OpenTasMenu(int client)
  * Surf Tas
  * 1. Helpers
  * 2. Frames
+ * 3. Trajectory
+ * 4. Files
  */
 public int TasMainMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
@@ -43,6 +48,7 @@ public int TasMainMenuHandler(Menu menu, MenuAction action, int param1, int para
 				case 0: OpenTasHelpersMenu(param1);
 				case 1: OpenFrameControlMenu(param1);
 				case 2: OpenTrajectoryControlMenu(param1);
+				case 3: OpenFileMenu(param1);
 			}
 		}
 		case MenuAction_End:
@@ -536,6 +542,47 @@ public int ChangeTrajectoryModeMenuHandler(Menu menu, MenuAction action, int par
 		{
 			if (param2 == MenuCancel_Exit)
 				OpenTrajectoryControlMenu(param1);
+		}
+		case MenuAction_End:
+			delete menu;
+	}
+}
+
+/**
+ * Opens File Menu
+ */
+public void OpenFileMenu(int client)
+{
+	Menu menu = new Menu(FileMenuHandler);
+	menu.SetTitle("File Menu");
+
+	menu.AddItem("0", "Save");
+	menu.AddItem("1", "Load");
+
+	menu.Display(client, MENU_TIME_FOREVER);
+}
+
+/**
+ * File Menu
+ * 1. Save
+ * 2. Load
+ */
+public int FileMenuHandler(Menu menu, MenuAction action, int param1, int param2)
+{
+	switch (action)
+	{
+		case MenuAction_Select:
+		{
+			switch (param2)
+			{
+				case 0: WriteCurrentTAS();
+				case 1: FileManagerInit(param1);
+			}
+		}
+		case MenuAction_Cancel:
+		{
+			if (param2 == MenuCancel_Exit)
+				OpenTasMenu(param1);
 		}
 		case MenuAction_End:
 			delete menu;

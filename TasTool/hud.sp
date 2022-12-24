@@ -6,7 +6,7 @@ public Action HudTextTimer(Handle timer, any userid)
 	{
 		char szHudText[128];
 
-		if (!g_hFrames)
+		if (!g_hFrames || g_iSelectedTick < 0)
 		    FormatEx(szHudText, sizeof(szHudText), "Tick: N/A\n");
 		else
 		{
